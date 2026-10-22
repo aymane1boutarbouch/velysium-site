@@ -97,9 +97,10 @@ export default function Hero({ ready }: { ready: boolean }) {
         minHeight: "100svh",
         display: "flex",
         flexDirection: "column",
-        justifyContent: "flex-end",
-        padding: "0 clamp(24px, 5vw, 80px)",
-        paddingBottom: "clamp(64px, 8vw, 96px)",
+        justifyContent: "center",
+        padding: "0 clamp(16px, 4vw, 80px)",
+        paddingTop: "clamp(88px, 12vh, 120px)",
+        paddingBottom: "clamp(48px, 6vw, 96px)",
         position: "relative",
         overflow: "hidden",
         backgroundColor: "var(--warm-white)",
@@ -121,14 +122,14 @@ export default function Hero({ ready }: { ready: boolean }) {
         }}
       />
 
-      {/* Layer 2: Corner year label — medium parallax */}
+      {/* Layer 2: Corner year label — hidden on small mobile to avoid collision */}
       <motion.div
         ref={layer2Ref}
+        className="hidden sm:flex"
         style={{
           position: "absolute",
           top: 80,
           right: "clamp(24px, 5vw, 80px)",
-          display: "flex",
           flexDirection: "column",
           alignItems: "flex-end",
           gap: 4,
@@ -150,16 +151,18 @@ export default function Hero({ ready }: { ready: boolean }) {
         style={{ position: "relative", zIndex: 3, opacity: opacityOut }}
       >
         {/* Badge */}
-        <div className="hero-sub" style={{ marginBottom: 32, opacity: 0 }}>
-          <span className="pill">Applications Métiers · Souveraineté Locale · Maroc</span>
+        <div className="hero-sub" style={{ marginBottom: "clamp(16px, 3vw, 32px)", opacity: 0 }}>
+          <span className="pill" style={{ maxWidth: "100%", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "normal" }}>
+            Applications Métiers · Souveraineté Locale · Maroc
+          </span>
         </div>
 
         {/* Main heading — split words */}
         <h1
           style={{
             fontFamily: "'Instrument Serif', serif",
-            fontSize: "clamp(3.2rem, 9.5vw, 9.5rem)",
-            lineHeight: 0.95,
+            fontSize: "clamp(2.5rem, 8.5vw, 9.5rem)",
+            lineHeight: 0.96,
             letterSpacing: "-0.025em",
             color: "var(--ink)",
             fontWeight: 400,
@@ -188,10 +191,10 @@ export default function Hero({ ready }: { ready: boolean }) {
         {/* Sub row */}
         <div
           style={{
-            marginTop: 40,
+            marginTop: "clamp(24px, 4vw, 40px)",
             display: "flex",
             alignItems: "flex-start",
-            gap: "clamp(24px, 4vw, 80px)",
+            gap: "clamp(20px, 4vw, 80px)",
             flexWrap: "wrap",
           }}
         >
@@ -199,7 +202,7 @@ export default function Hero({ ready }: { ready: boolean }) {
             className="hero-sub"
             style={{
               maxWidth: "38ch",
-              fontSize: "clamp(0.9rem, 1.4vw, 1.0625rem)",
+              fontSize: "clamp(0.875rem, 1.4vw, 1.0625rem)",
               lineHeight: 1.65,
               color: "var(--ash)",
               fontWeight: 300,
@@ -214,12 +217,11 @@ export default function Hero({ ready }: { ready: boolean }) {
           {/* Layer 4: Stats tags — fastest parallax via motion */}
           <motion.div
             ref={layer4Ref}
+            className="border-l-0 sm:border-l border-[var(--rule)] pl-0 sm:pl-6"
             style={{
               display: "flex",
               flexDirection: "column",
               gap: 8,
-              paddingLeft: "clamp(0px, 2vw, 40px)",
-              borderLeft: "1px solid var(--rule)",
               y: subY,
             }}
           >
@@ -232,7 +234,7 @@ export default function Hero({ ready }: { ready: boolean }) {
                 key={item}
                 className="hero-sub font-mono"
                 style={{
-                  fontSize: "0.75rem",
+                  fontSize: "clamp(0.6875rem, 1.1vw, 0.75rem)",
                   color: "var(--ash)",
                   letterSpacing: "0.06em",
                   opacity: 0,
@@ -245,8 +247,9 @@ export default function Hero({ ready }: { ready: boolean }) {
         </div>
       </motion.div>
 
-      {/* Scroll indicator */}
+      {/* Scroll indicator — desktop only */}
       <motion.div
+        className="hidden md:flex"
         initial={{ opacity: 0 }}
         animate={{ opacity: ready ? 1 : 0 }}
         transition={{ duration: 1, delay: 1.5 }}
@@ -255,7 +258,6 @@ export default function Hero({ ready }: { ready: boolean }) {
           bottom: 32,
           left: "50%",
           transform: "translateX(-50%)",
-          display: "flex",
           flexDirection: "column",
           alignItems: "center",
           gap: 8,

@@ -63,7 +63,7 @@ export default function SolutionModal({
             display: "flex",
             alignItems: "center",
             justifyContent: "center",
-            padding: "clamp(12px, 3vw, 32px)",
+            padding: "clamp(8px, 2.5vw, 32px)",
           }}
         >
           {/* Backdrop */}

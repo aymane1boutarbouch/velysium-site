@@ -8,7 +8,7 @@ export default function Footer() {
       style={{
         backgroundColor: "var(--ink)",
         borderTop: "1px solid rgba(255,255,255,0.06)",
-        padding: "clamp(24px, 4vw, 40px) clamp(24px, 5vw, 80px)",
+        padding: "clamp(24px, 4vw, 40px) clamp(16px, 4vw, 80px)",
         display: "flex",
         justifyContent: "space-between",
         alignItems: "center",

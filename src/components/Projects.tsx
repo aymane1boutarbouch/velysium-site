@@ -27,18 +27,18 @@ export default function Projects() {
 
     const cards = track.querySelectorAll<HTMLElement>(".project-card");
     const totalCards = cards.length;
-    const trackWidth = totalCards * (CARD_WIDTH + CARD_GAP) + PADDING;
-    const scrollDistance = trackWidth - window.innerWidth;
 
-    // Main horizontal scroll pin
+    // Main horizontal scroll pin (dynamic scroll distance based on track scrollWidth)
     const ctx = gsap.context(() => {
+      const getScrollDistance = () => Math.max(0, track.scrollWidth - window.innerWidth);
+
       const tl = gsap.timeline({
         scrollTrigger: {
           trigger: section,
           start: "top top",
-          end: () => `+=${scrollDistance + 200}`,
+          end: () => `+=${getScrollDistance() + 150}`,
           pin: true,
-          scrub: 0.9,
+          scrub: 0.85,
           anticipatePin: 1,
           invalidateOnRefresh: true,
         },
@@ -46,24 +46,22 @@ export default function Projects() {
 
       // Slide track horizontally
       tl.to(track, {
-        x: -scrollDistance,
+        x: () => -getScrollDistance(),
         ease: "none",
       });
 
       // Each card: scale + fade in/out as it crosses viewport center
       cards.forEach((card, i) => {
         const enterStart = i / totalCards;
-        const enterEnd = (i + 0.4) / totalCards;
-        const exitStart = (i + 0.7) / totalCards;
-        const exitEnd = (i + 1) / totalCards;
+        const exitStart = (i + 0.65) / totalCards;
 
         tl.fromTo(
           card,
-          { scale: 0.82, opacity: 0.35 },
+          { scale: 0.86, opacity: 0.4 },
           { scale: 1, opacity: 1, ease: "power2.out" },
           enterStart
         );
-        tl.to(card, { scale: 0.9, opacity: 0.5, ease: "power2.in" }, exitStart);
+        tl.to(card, { scale: 0.92, opacity: 0.5, ease: "power2.in" }, exitStart);
       });
     }, section);
 
@@ -102,12 +100,12 @@ export default function Projects() {
             top: 0,
             left: 0,
             right: 0,
-            padding: "clamp(80px, 8vw, 110px) clamp(24px, 5vw, 80px) 0",
+            padding: "clamp(72px, 8vw, 110px) clamp(16px, 4vw, 80px) 0",
             zIndex: 2,
             pointerEvents: "none",
           }}
         >
-          <p className="section-label" style={{ marginBottom: 14 }}>
+          <p className="section-label" style={{ marginBottom: "clamp(8px, 1.5vw, 14px)" }}>
             Solutions & Applications Métiers
           </p>
           <SplitHeading
@@ -116,7 +114,7 @@ export default function Projects() {
             italic
             style={{
               fontFamily: "'Instrument Serif', serif",
-              fontSize: "clamp(2.2rem, 4.5vw, 3.8rem)",
+              fontSize: "clamp(1.8rem, 4.5vw, 3.8rem)",
               fontWeight: 400,
               letterSpacing: "-0.02em",
               color: "var(--ink)",
@@ -134,11 +132,11 @@ export default function Projects() {
             top: 0,
             left: 0,
             height: "100%",
-            paddingLeft: `clamp(24px, 5vw, ${PADDING}px)`,
-            paddingRight: `clamp(24px, 5vw, ${PADDING}px)`,
-            paddingTop: "clamp(180px, 22vh, 220px)",
-            paddingBottom: 40,
-            gap: `${CARD_GAP}px`,
+            paddingLeft: "clamp(16px, 4vw, 80px)",
+            paddingRight: "clamp(16px, 4vw, 80px)",
+            paddingTop: "clamp(140px, 20vh, 220px)",
+            paddingBottom: "clamp(20px, 4vh, 40px)",
+            gap: "clamp(16px, 3vw, 32px)",
             display: "flex",
             alignItems: "stretch",
           }}
@@ -222,7 +220,11 @@ function ProjectCard({
     <div
       ref={cardRef}
       className="project-card tilt-card"
-      style={{ width: `${CARD_WIDTH}px`, flexShrink: 0 }}
+      style={{
+        width: "min(560px, calc(100vw - 36px))",
+        maxWidth: 560,
+        flexShrink: 0,
+      }}
     >
       <div
         ref={innerRef}
@@ -235,7 +237,7 @@ function ProjectCard({
         }}
         style={{
           height: "100%",
-          padding: "clamp(24px, 3vw, 40px)",
+          padding: "clamp(20px, 3.5vw, 40px)",
           display: "flex",
           flexDirection: "column",
           justifyContent: "space-between",
@@ -252,7 +254,7 @@ function ProjectCard({
               display: "flex",
               alignItems: "center",
               gap: 10,
-              marginBottom: 28,
+              marginBottom: "clamp(16px, 2.5vw, 28px)",
             }}
           >
             <span
@@ -283,12 +285,12 @@ function ProjectCard({
           <h3
             style={{
               fontFamily: "'Instrument Serif', serif",
-              fontSize: "clamp(1.6rem, 3vw, 2.1rem)",
+              fontSize: "clamp(1.4rem, 3.2vw, 2.1rem)",
               fontWeight: 400,
               color: "var(--ink)",
               letterSpacing: "-0.018em",
               lineHeight: 1.15,
-              marginBottom: 14,
+              marginBottom: "clamp(8px, 1.5vw, 14px)",
             }}
           >
             {solution.name}
@@ -297,8 +299,8 @@ function ProjectCard({
           {/* Tagline */}
           <p
             style={{
-              fontSize: "0.9rem",
-              lineHeight: 1.62,
+              fontSize: "clamp(0.8125rem, 1.2vw, 0.9rem)",
+              lineHeight: 1.58,
               color: "var(--ash)",
               fontWeight: 300,
               maxWidth: "44ch",
@@ -308,14 +310,14 @@ function ProjectCard({
           </p>
         </div>
 
-        {/* Tags */}
+        {/* Tags & metrics */}
         <div>
           <div
             style={{
               display: "flex",
               gap: 6,
               flexWrap: "wrap",
-              marginBottom: 22,
+              marginBottom: "clamp(14px, 2vw, 22px)",
             }}
           >
             {solution.tags.slice(0, 4).map((tag) => (
@@ -330,10 +332,10 @@ function ProjectCard({
             style={{
               display: "grid",
               gridTemplateColumns: "repeat(3, 1fr)",
-              gap: 16,
-              paddingTop: 20,
+              gap: "clamp(8px, 2vw, 16px)",
+              paddingTop: "clamp(12px, 2vw, 20px)",
               borderTop: "1px solid var(--rule)",
-              marginBottom: 20,
+              marginBottom: "clamp(12px, 2vw, 20px)",
             }}
           >
             {solution.metrics.slice(0, 3).map((m) => (
@@ -341,7 +343,7 @@ function ProjectCard({
                 <span
                   style={{
                     fontFamily: "'Instrument Serif', serif",
-                    fontSize: "1.5rem",
+                    fontSize: "clamp(1.15rem, 2.5vw, 1.5rem)",
                     fontWeight: 400,
                     color: "var(--ink)",
                     letterSpacing: "-0.02em",
@@ -350,7 +352,7 @@ function ProjectCard({
                 >
                   {m.value}
                 </span>
-                <span className="section-label" style={{ fontSize: "0.55rem" }}>
+                <span className="section-label" style={{ fontSize: "clamp(0.5rem, 0.9vw, 0.55rem)" }}>
                   {m.label}
                 </span>
               </div>

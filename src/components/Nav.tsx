@@ -51,12 +51,12 @@ export default function Nav() {
         left: 0,
         right: 0,
         zIndex: 500,
-        padding: "0 clamp(24px, 5vw, 80px)",
+        padding: "0 clamp(16px, 4vw, 80px)",
         height: 64,
         display: "flex",
         alignItems: "center",
         justifyContent: "space-between",
-        backgroundColor: scrolled ? "rgba(250, 248, 244, 0.9)" : "transparent",
+        backgroundColor: scrolled ? "rgba(250, 248, 244, 0.92)" : "transparent",
         backdropFilter: scrolled ? "blur(16px)" : "none",
         WebkitBackdropFilter: scrolled ? "blur(16px)" : "none",
         borderBottom: scrolled ? "1px solid var(--rule)" : "1px solid transparent",
@@ -70,30 +70,33 @@ export default function Nav() {
         style={{
           display: "inline-flex",
           alignItems: "center",
-          gap: 12,
+          gap: "clamp(8px, 2vw, 12px)",
           textDecoration: "none",
+          flexShrink: 0,
         }}
       >
         <img
           id="nav-logo-mark"
           src="/assets/mark.svg"
           alt="Velysium Emblem"
-          style={{ width: 32, height: 25, objectFit: "contain" }}
+          style={{ width: "clamp(26px, 4vw, 32px)", height: "auto", objectFit: "contain" }}
         />
         <img
           src="/assets/wordmark.svg"
           alt="Velysium"
-          style={{ height: 15, width: "auto", objectFit: "contain" }}
+          style={{ height: "clamp(12px, 2vw, 15px)", width: "auto", objectFit: "contain" }}
         />
       </a>
 
-      {/* Links */}
-      <nav style={{ display: "flex", gap: 36, alignItems: "center" }}>
-        {NAV_LINKS.map((l) => (
-          <a key={l.href} href={l.href} className="nav-link">
-            {l.label}
-          </a>
-        ))}
+      {/* Links & CTA */}
+      <nav style={{ display: "flex", gap: "clamp(14px, 3vw, 36px)", alignItems: "center" }}>
+        <div className="hidden md:flex items-center gap-7 lg:gap-9">
+          {NAV_LINKS.map((l) => (
+            <a key={l.href} href={l.href} className="nav-link">
+              {l.label}
+            </a>
+          ))}
+        </div>
 
         {/* Magnetic CTA */}
         <a
@@ -101,10 +104,10 @@ export default function Nav() {
           href="#contact"
           className="magnetic-btn"
           style={{
-            padding: "8px 20px",
+            padding: "7px clamp(14px, 2vw, 20px)",
             border: "1px solid var(--ink)",
             borderRadius: 3,
-            fontSize: "0.8125rem",
+            fontSize: "clamp(0.75rem, 1.2vw, 0.8125rem)",
             letterSpacing: "0.07em",
             textTransform: "uppercase",
             color: "var(--ink)",
@@ -112,6 +115,7 @@ export default function Nav() {
             fontFamily: "'Space Mono', monospace",
             backgroundColor: "transparent",
             transition: "background 0.3s, color 0.3s",
+            whiteSpace: "nowrap",
           }}
           onMouseEnter={(e) => {
             (e.currentTarget as HTMLElement).style.backgroundColor = "var(--ink)";

@@ -1,27 +1,58 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import gsap from "gsap";
 
 export default function Cursor() {
+  const [enabled, setEnabled] = useState(false);
   const dotRef = useRef<HTMLDivElement>(null);
   const ringRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    const dot = dotRef.current!;
-    const ring = ringRef.current!;
+    // Only enable on desktop pointer devices with fine control (no touch/mobile/tablets)
+    const checkPointer = () => {
+      const isTouch =
+        window.matchMedia("(hover: none)").matches ||
+        window.matchMedia("(pointer: coarse)").matches ||
+        window.innerWidth < 1024 ||
+        "ontouchstart" in window ||
+        navigator.maxTouchPoints > 0;
+      setEnabled(!isTouch);
+    };
+
+    checkPointer();
+    window.addEventListener("resize", checkPointer);
+    return () => window.removeEventListener("resize", checkPointer);
+  }, []);
+
+  useEffect(() => {
+    if (!enabled) return;
+
+    const dot = dotRef.current;
+    const ring = ringRef.current;
+    if (!dot || !ring) return;
 
     let mx = window.innerWidth / 2;
     let my = window.innerHeight / 2;
     let ringX = mx;
     let ringY = my;
+    let hasMoved = false;
 
     // Fast dot follows mouse exactly
     const onMove = (e: MouseEvent) => {
       mx = e.clientX;
       my = e.clientY;
+      if (!hasMoved) {
+        hasMoved = true;
+        ringX = mx;
+        ringY = my;
+        gsap.set([dot, ring], { opacity: 1 });
+      }
       gsap.set(dot, { x: mx, y: my });
     };
+
+    // Hide initially until mouse moves to prevent center stuck bug
+    gsap.set([dot, ring], { opacity: 0 });
 
     // Lagging ring follows with spring
     let rafId: number;
@@ -41,7 +72,9 @@ export default function Cursor() {
 
     const addListeners = () => {
       document
-        .querySelectorAll("a, button, [role='button'], .magnetic-btn, input, textarea, select, label, .project-card")
+        .querySelectorAll(
+          "a, button, [role='button'], .magnetic-btn, input, textarea, select, label, .project-card"
+        )
         .forEach((el) => {
           el.addEventListener("mouseenter", onEnter);
           el.addEventListener("mouseleave", onLeave);
@@ -49,12 +82,11 @@ export default function Cursor() {
     };
 
     addListeners();
-    // Re-run after 1.5s for dynamically rendered elements
     const t = setTimeout(addListeners, 1500);
 
-    // Magnetic buttons
+    // Magnetic buttons (desktop only)
     const onMagneticMove = (e: MouseEvent) => {
-      const target = (e.currentTarget as HTMLElement);
+      const target = e.currentTarget as HTMLElement;
       const rect = target.getBoundingClientRect();
       const cx = rect.left + rect.width / 2;
       const cy = rect.top + rect.height / 2;
@@ -91,8 +123,11 @@ export default function Cursor() {
       clearTimeout(t);
       clearTimeout(t2);
       window.removeEventListener("mousemove", onMove);
+      document.body.classList.remove("cursor-hover");
     };
-  }, []);
+  }, [enabled]);
+
+  if (!enabled) return null;
 
   return (
     <>

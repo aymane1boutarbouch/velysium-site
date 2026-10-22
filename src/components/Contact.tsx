@@ -81,7 +81,7 @@ export default function Contact() {
       ref={sectionRef}
       id="contact"
       style={{
-        padding: "clamp(80px, 10vw, 140px) clamp(24px, 5vw, 80px)",
+        padding: "clamp(64px, 8vw, 140px) clamp(16px, 4vw, 80px)",
         backgroundColor: "var(--ink)",
         color: "var(--warm-white)",
         clipPath: "inset(0 0 100% 0)", // starts clipped
@@ -90,8 +90,8 @@ export default function Contact() {
       <div
         style={{
           display: "grid",
-          gridTemplateColumns: "repeat(auto-fit, minmax(min(100%, 360px), 1fr))",
-          gap: "clamp(48px, 8vw, 100px)",
+          gridTemplateColumns: "repeat(auto-fit, minmax(min(100%, 300px), 1fr))",
+          gap: "clamp(40px, 6vw, 100px)",
           alignItems: "start",
         }}
       >

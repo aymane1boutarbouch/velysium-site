@@ -122,7 +122,7 @@ export default function WhatWeDo() {
       ref={sectionRef}
       id="approach"
       style={{
-        padding: "clamp(80px, 10vw, 140px) clamp(24px, 5vw, 80px)",
+        padding: "clamp(64px, 8vw, 140px) clamp(16px, 4vw, 80px)",
         backgroundColor: "var(--sand)",
         borderTop: "1px solid var(--rule)",
         clipPath: "inset(0 0 100% 0)", // starts clipped

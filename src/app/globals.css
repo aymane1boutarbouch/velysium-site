@@ -367,3 +367,37 @@ input, textarea, select {
 a, button, [role="button"] {
   cursor: none;
 }
+
+/* ─── Mobile & Tablet Overrides (No custom cursor, native touch) ── */
+@media (hover: none), (pointer: coarse), (max-width: 1024px) {
+  html,
+  body,
+  a,
+  button,
+  [role="button"],
+  input,
+  textarea,
+  select,
+  .nav-link,
+  .magnetic-btn,
+  .project-card,
+  .tilt-card,
+  .draw-underline {
+    cursor: auto !important;
+  }
+
+  button,
+  a,
+  [role="button"] {
+    cursor: pointer !important;
+  }
+
+  #cursor-dot,
+  #cursor-ring {
+    display: none !important;
+    opacity: 0 !important;
+    visibility: hidden !important;
+    pointer-events: none !important;
+  }
+}
+

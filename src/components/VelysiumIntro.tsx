@@ -29,7 +29,7 @@ interface SceneProps {
 }
 
 function CinematicThreeScene({ timelineState }: SceneProps) {
-  const { camera } = useThree();
+  const { camera, size } = useThree();
 
   // 1. Tunnel speed streaks (120 thin lines via LineSegments)
   const streakCount = 120;
@@ -152,7 +152,9 @@ function CinematicThreeScene({ timelineState }: SceneProps) {
       shakeX = (Math.random() - 0.5) * s.cameraShake;
       shakeY = (Math.random() - 0.5) * s.cameraShake;
     }
-    camera.position.set(shakeX, shakeY, s.cameraZ);
+    const aspect = size.width / Math.max(1, size.height);
+    const portraitMultiplier = aspect < 1 ? Math.min(1.85, 1 / Math.max(0.45, aspect)) : 1;
+    camera.position.set(shakeX, shakeY, s.cameraZ * portraitMultiplier);
     camera.lookAt(0, 0, 0);
 
     // 2. Tunnel speed streaks motion
@@ -294,8 +296,12 @@ export default function VelysiumIntro({ onComplete }: VelysiumIntroProps) {
     const easeOut = "cubic-bezier(0.16, 1, 0.3, 1)";
     const easeInOut = "power4.inOut";
 
+    const isMobile = window.innerWidth < 768;
+    const baseLockupScale = Math.min(1, Math.max(0.42, (window.innerWidth - 32) / 660));
+
     // Initial setup
     tl.set("#intro-2d-stage", { opacity: 0 });
+    tl.set("#intro-lockup-group", { scale: baseLockupScale });
     tl.set("#intro-mark-svg", { scale: 0.75, opacity: 0 });
     tl.set(".intro-v-facet", { opacity: 0 });
     tl.set("#intro-sparkle-group", { opacity: 0, scale: 0, transformOrigin: "center center" });
@@ -543,7 +549,7 @@ export default function VelysiumIntro({ onComplete }: VelysiumIntroProps) {
     tl.to(
       "#intro-lockup-group",
       {
-        scale: 0.85,
+        scale: baseLockupScale * 0.85,
         duration: 0.25,
         ease: "power2.in",
       },
@@ -551,12 +557,14 @@ export default function VelysiumIntro({ onComplete }: VelysiumIntroProps) {
     );
 
     // Lockup shrinks and flies into navbar logo target
+    const targetX = -window.innerWidth / 2 + (isMobile ? 54 : 110);
+    const targetY = -window.innerHeight / 2 + 32;
     tl.to(
       "#intro-lockup-group",
       {
-        scale: 0.18,
-        x: -window.innerWidth / 2 + 110,
-        y: -window.innerHeight / 2 + 34,
+        scale: baseLockupScale * (isMobile ? 0.24 : 0.18),
+        x: targetX,
+        y: targetY,
         opacity: 0,
         duration: 0.7,
         ease: easeInOut,
@@ -712,8 +720,8 @@ export default function VelysiumIntro({ onComplete }: VelysiumIntroProps) {
         type="button"
         style={{
           position: "fixed",
-          top: 24,
-          right: 28,
+          top: "clamp(14px, 3vh, 24px)",
+          right: "clamp(14px, 4vw, 28px)",
           zIndex: 50,
           padding: "6px 14px",
           background: "rgba(247, 246, 242, 0.85)",
@@ -740,7 +748,7 @@ export default function VelysiumIntro({ onComplete }: VelysiumIntroProps) {
           e.currentTarget.style.color = "#121348";
         }}
       >
-        Passer <span style={{ opacity: 0.5, fontSize: "0.6rem" }}>[Esc]</span>
+        Passer <span className="hidden sm:inline" style={{ opacity: 0.5, fontSize: "0.6rem" }}>[Esc]</span>
       </button>
 
       {/* 3D R3F CANVAS (Speed streaks + 200 Shards) */}
