@@ -1,0 +1,245 @@
+const fs = require('fs');
+const sharp = require('sharp');
+
+function createCleanMarkSvg() {
+  return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 280 220" fill="none">
+  <defs>
+    <!-- Facet 1: Outer Left Outer (Vibrant Violet to Indigo) -->
+    <linearGradient id="g-out-left-outer" x1="0%" y1="0%" x2="60%" y2="100%">
+      <stop offset="0%" stop-color="#8a53f9"/>
+      <stop offset="45%" stop-color="#5f31e3"/>
+      <stop offset="100%" stop-color="#241598"/>
+    </linearGradient>
+
+    <!-- Facet 2: Outer Left Bevel/Inner (Deep Midnight Navy) -->
+    <linearGradient id="g-out-left-bevel" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#3b219e"/>
+      <stop offset="50%" stop-color="#1d1372"/>
+      <stop offset="100%" stop-color="#0f0c4f"/>
+    </linearGradient>
+
+    <!-- Facet 3: Inner Left Wing Main (Electric Violet to Indigo) -->
+    <linearGradient id="g-in-left-main" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#aa6efc"/>
+      <stop offset="50%" stop-color="#6937e6"/>
+      <stop offset="100%" stop-color="#2d1aa8"/>
+    </linearGradient>
+
+    <!-- Facet 4: Inner Left Shadow / Center Valley -->
+    <linearGradient id="g-center-valley" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#1a1470"/>
+      <stop offset="50%" stop-color="#110d54"/>
+      <stop offset="100%" stop-color="#0b0838"/>
+    </linearGradient>
+
+    <!-- Facet 5: Inner Right Wing Main (Bright Electric Cyan / Royal Blue) -->
+    <linearGradient id="g-in-right-main" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#5693fc"/>
+      <stop offset="40%" stop-color="#3c76f5"/>
+      <stop offset="85%" stop-color="#204ecb"/>
+      <stop offset="100%" stop-color="#1638a8"/>
+    </linearGradient>
+
+    <!-- Facet 6: Inner Right Fold / Center Rib -->
+    <linearGradient id="g-in-right-rib" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#3155d4"/>
+      <stop offset="50%" stop-color="#1b2b98"/>
+      <stop offset="100%" stop-color="#101862"/>
+    </linearGradient>
+
+    <!-- Facet 7: Center Bottom V Fold (Dark Navy Chevron) -->
+    <linearGradient id="g-center-bottom" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#1e1878"/>
+      <stop offset="60%" stop-color="#120e58"/>
+      <stop offset="100%" stop-color="#0a083a"/>
+    </linearGradient>
+
+    <!-- Facet 8: Outer Right Wing Main (Vibrant Violet Magenta) -->
+    <linearGradient id="g-out-right-main" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#c982fe"/>
+      <stop offset="45%" stop-color="#9a4df8"/>
+      <stop offset="80%" stop-color="#6a2be0"/>
+      <stop offset="100%" stop-color="#3c16a8"/>
+    </linearGradient>
+
+    <!-- Facet 9: Outer Right Bevel (Indigo to Deep Navy) -->
+    <linearGradient id="g-out-right-bevel" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#7e39eb"/>
+      <stop offset="50%" stop-color="#461fa8"/>
+      <stop offset="100%" stop-color="#1b0a6e"/>
+    </linearGradient>
+
+    <!-- Facet 10: Apex Bottom Tip -->
+    <linearGradient id="g-apex-tip" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#1d1575"/>
+      <stop offset="50%" stop-color="#100b4a"/>
+      <stop offset="100%" stop-color="#080530"/>
+    </linearGradient>
+
+    <!-- Sparkle Gradients -->
+    <radialGradient id="g-sparkle-glow" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#f5ecff" stop-opacity="0.95"/>
+      <stop offset="30%" stop-color="#d4b0fd" stop-opacity="0.85"/>
+      <stop offset="65%" stop-color="#9f65fb" stop-opacity="0.5"/>
+      <stop offset="100%" stop-color="#7c3aed" stop-opacity="0"/>
+    </radialGradient>
+
+    <linearGradient id="g-sparkle-star" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#ffffff"/>
+      <stop offset="30%" stop-color="#ecd6ff"/>
+      <stop offset="70%" stop-color="#ae7dfc"/>
+      <stop offset="100%" stop-color="#8047f8"/>
+    </linearGradient>
+  </defs>
+
+  <g id="velysium-mark">
+    <!-- V FACETS (Each facet as a separate path for GSAP staggered assembly) -->
+    <g id="v-facets">
+      <!-- 1. Outer Left Wing - Outer Face -->
+      <path id="facet-outer-left-main" class="v-facet"
+        d="M 2 34 L 18 34 L 137 206 L 137 215 L 2 34 Z"
+        fill="url(#g-out-left-outer)"/>
+
+      <!-- 2. Outer Left Wing - Inner Bevel Face -->
+      <path id="facet-outer-left-bevel" class="v-facet"
+        d="M 18 34 L 37 34 L 137 178 L 137 206 Z"
+        fill="url(#g-out-left-bevel)"/>
+
+      <!-- 3. Inner Left Wing - Outer Face -->
+      <path id="facet-inner-left-main" class="v-facet"
+        d="M 45 34 L 62 34 L 137 142 L 118 152 Z"
+        fill="url(#g-in-left-main)"/>
+
+      <!-- 4. Inner Left Wing - Center Crease / Valley -->
+      <path id="facet-center-valley" class="v-facet"
+        d="M 62 34 L 81 34 L 137 114 L 137 142 Z"
+        fill="url(#g-center-valley)"/>
+
+      <!-- 5. Inner Right Wing - Main Bright Cyan-Blue Highlight -->
+      <path id="facet-inner-right-main" class="v-facet"
+        d="M 193 34 L 212 34 L 149 146 L 137 114 Z"
+        fill="url(#g-in-right-main)"/>
+
+      <!-- 6. Inner Right Wing - Bevel / Ribbon Fold Over Center -->
+      <path id="facet-inner-right-bevel" class="v-facet"
+        d="M 212 34 L 229 34 L 160 162 L 149 146 Z"
+        fill="url(#g-in-right-rib)"/>
+
+      <!-- 7. Center Bottom Fold Connecting Inner to Apex (closes center gap) -->
+      <path id="facet-center-bottom" class="v-facet"
+        d="M 137 114 L 149 146 L 160 162 L 137 182 L 118 152 L 137 142 Z"
+        fill="url(#g-center-bottom)"/>
+
+      <!-- 8. Outer Right Wing - Inner Bevel Face -->
+      <path id="facet-outer-right-bevel" class="v-facet"
+        d="M 237 34 L 256 34 L 137 206 L 137 178 Z"
+        fill="url(#g-out-right-bevel)"/>
+
+      <!-- 9. Outer Right Wing - Outer Face -->
+      <path id="facet-outer-right-main" class="v-facet"
+        d="M 256 34 L 272 34 L 137 215 L 137 206 Z"
+        fill="url(#g-out-right-main)"/>
+
+      <!-- 10. Apex Bottom Convergence Tip -->
+      <path id="facet-apex-bottom" class="v-facet"
+        d="M 131 204 L 137 215 L 143 204 L 137 180 Z"
+        fill="url(#g-apex-tip)"/>
+    </g>
+
+    <!-- SPARKLE (Diamond star + soft radial aura) -->
+    <g id="sparkle" class="v-sparkle">
+      <!-- Glow -->
+      <circle cx="137" cy="27" r="28" fill="url(#g-sparkle-glow)"/>
+      <!-- Star -->
+      <path id="sparkle-star"
+        d="M 137 2 Q 137 27 165 27 Q 137 27 137 52 Q 137 27 109 27 Q 137 27 137 2 Z"
+        fill="url(#g-sparkle-star)"/>
+    </g>
+  </g>
+</svg>`;
+}
+
+async function run() {
+  const markSvg = createCleanMarkSvg();
+  fs.writeFileSync('public/assets/mark.svg', markSvg.trim());
+
+  // Read wordmark.svg
+  const wordmarkSvg = fs.readFileSync('public/assets/wordmark.svg', 'utf8');
+
+  // Full lockup SVG
+  const logoFullSvg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 940 220" fill="none">
+  <defs>
+    <!-- Facet Gradients from mark -->
+    <linearGradient id="lf-g-out-left-outer" x1="0%" y1="0%" x2="60%" y2="100%">
+      <stop offset="0%" stop-color="#8a53f9"/><stop offset="45%" stop-color="#5f31e3"/><stop offset="100%" stop-color="#241598"/>
+    </linearGradient>
+    <linearGradient id="lf-g-out-left-bevel" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#3b219e"/><stop offset="50%" stop-color="#1d1372"/><stop offset="100%" stop-color="#0f0c4f"/>
+    </linearGradient>
+    <linearGradient id="lf-g-in-left-main" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#aa6efc"/><stop offset="50%" stop-color="#6937e6"/><stop offset="100%" stop-color="#2d1aa8"/>
+    </linearGradient>
+    <linearGradient id="lf-g-center-valley" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#1a1470"/><stop offset="50%" stop-color="#110d54"/><stop offset="100%" stop-color="#0b0838"/>
+    </linearGradient>
+    <linearGradient id="lf-g-in-right-main" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#5693fc"/><stop offset="40%" stop-color="#3c76f5"/><stop offset="85%" stop-color="#204ecb"/><stop offset="100%" stop-color="#1638a8"/>
+    </linearGradient>
+    <linearGradient id="lf-g-in-right-rib" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#3155d4"/><stop offset="50%" stop-color="#1b2b98"/><stop offset="100%" stop-color="#101862"/>
+    </linearGradient>
+    <linearGradient id="lf-g-center-bottom" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#1e1878"/><stop offset="60%" stop-color="#120e58"/><stop offset="100%" stop-color="#0a083a"/>
+    </linearGradient>
+    <linearGradient id="lf-g-out-right-main" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#c982fe"/><stop offset="45%" stop-color="#9a4df8"/><stop offset="80%" stop-color="#6a2be0"/><stop offset="100%" stop-color="#3c16a8"/>
+    </linearGradient>
+    <linearGradient id="lf-g-out-right-bevel" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#7e39eb"/><stop offset="50%" stop-color="#461fa8"/><stop offset="100%" stop-color="#1b0a6e"/>
+    </linearGradient>
+    <linearGradient id="lf-g-apex-tip" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#1d1575"/><stop offset="50%" stop-color="#100b4a"/><stop offset="100%" stop-color="#080530"/>
+    </linearGradient>
+    <radialGradient id="lf-g-sparkle-glow" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#f5ecff" stop-opacity="0.95"/><stop offset="30%" stop-color="#d4b0fd" stop-opacity="0.85"/><stop offset="65%" stop-color="#9f65fb" stop-opacity="0.5"/><stop offset="100%" stop-color="#7c3aed" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="lf-g-sparkle-star" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#ffffff"/><stop offset="30%" stop-color="#ecd6ff"/><stop offset="70%" stop-color="#ae7dfc"/><stop offset="100%" stop-color="#8047f8"/>
+    </linearGradient>
+    <!-- Wordmark Gradient -->
+    <linearGradient id="g-wordmark" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#121348"/><stop offset="50%" stop-color="#191760"/><stop offset="100%" stop-color="#131248"/>
+    </linearGradient>
+  </defs>
+
+  <g id="full-mark" transform="translate(0, 0)">
+    <g id="v-facets">
+      <path id="lf-facet-outer-left-main" d="M 2 34 L 18 34 L 137 206 L 137 215 L 2 34 Z" fill="url(#lf-g-out-left-outer)"/>
+      <path id="lf-facet-outer-left-bevel" d="M 18 34 L 37 34 L 137 178 L 137 206 Z" fill="url(#lf-g-out-left-bevel)"/>
+      <path id="lf-facet-inner-left-main" d="M 45 34 L 62 34 L 137 142 L 118 152 Z" fill="url(#lf-g-in-left-main)"/>
+      <path id="facet-center-valley" d="M 62 34 L 81 34 L 137 114 L 137 142 Z" fill="url(#lf-g-center-valley)"/>
+      <path id="facet-inner-right-main" d="M 193 34 L 212 34 L 149 146 L 137 114 Z" fill="url(#lf-g-in-right-main)"/>
+      <path id="facet-inner-right-bevel" d="M 212 34 L 229 34 L 160 162 L 149 146 Z" fill="url(#lf-g-in-right-rib)"/>
+      <path id="facet-center-bottom" d="M 137 114 L 149 146 L 160 162 L 137 182 L 118 152 L 137 142 Z" fill="url(#lf-g-center-bottom)"/>
+      <path id="facet-outer-right-bevel" d="M 237 34 L 256 34 L 137 206 L 137 178 Z" fill="url(#lf-g-out-right-bevel)"/>
+      <path id="facet-outer-right-main" d="M 256 34 L 272 34 L 137 215 L 137 206 Z" fill="url(#lf-g-out-right-main)"/>
+      <path id="facet-apex-bottom" d="M 131 204 L 137 215 L 143 204 L 137 180 Z" fill="url(#lf-g-apex-tip)"/>
+    </g>
+    <g id="sparkle" class="v-sparkle">
+      <circle cx="137" cy="27" r="28" fill="url(#lf-g-sparkle-glow)"/>
+      <path d="M 137 2 Q 137 27 165 27 Q 137 27 137 52 Q 137 27 109 27 Q 137 27 137 2 Z" fill="url(#lf-g-sparkle-star)"/>
+    </g>
+  </g>
+
+  <g id="full-wordmark" transform="translate(305, 76)" fill="url(#g-wordmark)">
+    ${wordmarkSvg.match(/<g id="velysium-wordmark"[^>]*>([\s\S]*?)<\/g>\s*<\/svg>/)[1]}
+  </g>
+</svg>`;
+
+  fs.writeFileSync('public/assets/logo-full.svg', logoFullSvg.trim());
+
+  await sharp(Buffer.from(logoFullSvg)).png().toFile('public/assets/logo-full-clean.png');
+  console.log('Saved refined SVGs and rendered logo-full-clean.png');
+}
+
+run().catch(console.error);
